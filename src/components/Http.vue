@@ -1,34 +1,60 @@
 <template>
+  <section class="src-componentes-http mt-3">
+    <div class="container-fluid">
+      <h2>Http requests</h2>
+      <hr />
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-3">
+            <button class="btn btn-primary" @click="getUsersCb()">
+              Pedir XMLHttpRequest
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-warning" @click="getUsersFetch()">
+              Pedir Fetch
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-success" @click="getUsersAxios()">
+              Pedir Axios
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-danger" @click="borrar()">Borrar</button>
+          </div>
+        </div>
+      </div>
 
-  <section class="src-componentes-http">
-    <div class="jumbotron">
-        <h2>Componente http</h2>
-        <hr>
-
-        <button class="btn btn-danger my-3 mr-3" @click="getPostsCb()" >Pedir XMLHttpRequest</button>
-        <button class="btn btn-warning my-3 mr-3" @click="getPostsFetch()" >Pedir Fetch</button>
-        <button class="btn btn-success my-3" @click="getPostsAxios()" >Pedir Axios</button>
-
-        <!-- <pre>{{ posts }}</pre> -->
-
-        <div v-if="posts.length" class="table-responsive">
-          <table class="table table-dark">
+      <div v-if="users.length" class="table-container mt-3">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered mt-3">
             <!-- encabezado de la tabla -->
-            <tr>
-              <th v-for="(col,index) in getCols" :key="index">{{col}}</th>
-            </tr>
+            <thead>
+              <tr>
+                <th v-for="(col, index) in getCols" :key="index">{{ col }}</th>
+              </tr>
+            </thead>
 
             <!-- filas con los datos -->
-            <tr v-for="(post,index) in posts" :key="index">
-              <td v-for="(col,index) in getCols" :key="index">{{post[col]}}</td>
-            </tr>
+            <tbody>
+              <tr v-for="(user, index) in users" :key="index">
+                <td v-for="(col, index) in getCols" :key="index">
+                  {{ user[col] }}
+                </td>
+              </tr>
+            </tbody>
           </table>
-          <h4 class="alert alert-primary">Se encontraron {{posts.length}} posts.</h4>
         </div>
-        <h4 v-else class="alert alert-warning">No se encontraron posts</h4>
+      </div>
+      <div v-if="users.length" class="alert alert-primary mt-3">
+        Se encontraron {{ users.length }} usuarios.
+      </div>
+      <div v-else class="alert alert-secondary mt-3">
+        No se encontraron usuarios
+      </div>
     </div>
   </section>
-
 </template>
 
 <script lang="js">
@@ -41,20 +67,13 @@
     },
     data () {
       return {
-        //url : 'https://jsonplaceholder.typicode.com/posts',
-        //url : 'https://jsonplaceholder.typicode.com/users',
-        url : 'https://5c8ef17a3e557700145e85c7.mockapi.io/clientes',
-        posts : []
+        url : 'https://60a5969fc0c1fd00175f40c0.mockapi.io/api/users',
+        users : []
       }
     },
     methods: {
-
-      /* ---------------------------------------------------- */
-      /*        AJAX: Asynchronous Javascript And XML         */
-      /* ---------------------------------------------------- */
-
       /* ---- AJAX: XMLHttpRequest ---- */
-      getPostsCb() {
+      getUsersCb() {
         // creo la instancia de comunicación asincrónica AJAX
         let xhr = new XMLHttpRequest
         //configuro dicha instancia
@@ -65,7 +84,7 @@
           if(xhr.status == 200) {
             let respuesta = JSON.parse(xhr.response)
             console.log('XMLHttpRequest', respuesta)
-            this.posts = respuesta
+            this.users = respuesta
           }
           else {
             console.error(`Error en GET -> status: ${xhr.status}`)
@@ -80,33 +99,33 @@
       },
 
       /* ---- AJAX: FETCH ---- */
-      getPostsFetch() {
+      getUsersFetch() {
         fetch(this.url)
         .then(datos => datos.json())
         .then(respuesta => {
           console.log('FETCH',respuesta)
-          this.posts = respuesta
+          this.users = respuesta
         })
         .catch(error => console.error(error))
       },
 
       /* ---- AJAX: AXIOS ---- */
-      //https://github.com/axios/axios
-      //https://www.npmjs.com/package/axios
-      //npm i axios vue-axios
-      getPostsAxios() {
+      getUsersAxios() {
         this.axios(this.url)
         .then( respuesta => {
           console.log('AXIOS',respuesta.data)
-          this.posts = respuesta.data
+          this.users = respuesta.data
         })
         .catch(error => console.log(error))
+      },
+      borrar() {
+        this.users = []
       }
 
     },
     computed: {
       getCols() {
-        return Object.keys(this.posts[0])
+        return Object.keys(this.users[0])
       }
     }
 }
@@ -115,22 +134,11 @@
 </script>
 
 <style scoped lang="css">
-  .src-componentes-http {
-
-  }
-
-.jumbotron {
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b4ddb4+0,83c783+17,52b152+33,008a00+67,005700+83,002400+100;Green+3D+%231 */
-    background: rgb(180,221,180); /* Old browsers */
-    /* background: -moz-linear-gradient(top,  rgba(180,221,180,1) 0%, rgba(131,199,131,1) 17%, rgba(82,177,82,1) 33%, rgba(0,138,0,1) 67%, rgba(0,87,0,1) 83%, rgba(0,36,0,1) 100%);*/ /* FF3.6-15 */
-    /* background: -webkit-linear-gradient(top,  rgba(180,221,180,1) 0%,rgba(131,199,131,1) 17%,rgba(82,177,82,1) 33%,rgba(0,138,0,1) 67%,rgba(0,87,0,1) 83%,rgba(0,36,0,1) 100%); */ /* Chrome10-25,Safari5.1-6 */
-    /* background: linear-gradient(to bottom,  rgba(180,221,180,1) 0%,rgba(131,199,131,1) 17%,rgba(82,177,82,1) 33%,rgba(0,138,0,1) 67%,rgba(0,87,0,1) 83%,rgba(0,36,0,1) 100%);*/  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4ddb4', endColorstr='#002400',GradientType=0 ); */ /* IE6-9 */
-
-    color: #333;
-  }
-
-  hr {
-    background-color: #444;
-  }  
+.table-container {
+  height: 500px;
+  overflow: scroll;
+}
+.row button {
+  width: 100%;
+}
 </style>
