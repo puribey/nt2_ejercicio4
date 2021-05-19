@@ -15,19 +15,11 @@
           <table class="table table-dark">
             <!-- encabezado de la tabla -->
             <tr>
-              <!-- <th>id</th>
-              <th>userId</th>
-              <th>title</th>
-              <th>body</th> -->
               <th v-for="(col,index) in getCols" :key="index">{{col}}</th>
             </tr>
 
             <!-- filas con los datos -->
             <tr v-for="(post,index) in posts" :key="index">
-              <!-- <td>{{post.id}}</td>
-              <td>{{post.userId}}</td>
-              <td>{{post.title}}</td>
-              <td>{{post.body}}</td> -->
               <td v-for="(col,index) in getCols" :key="index">{{post[col]}}</td>
             </tr>
           </table>

@@ -58,7 +58,5 @@
 </script>
 
 <style scoped lang="css">
-  .src-componentes-navbar {
-
-  }
+  .src-componentes-navbar {}
 </style>

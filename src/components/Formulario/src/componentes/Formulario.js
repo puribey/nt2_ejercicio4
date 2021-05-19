@@ -6,10 +6,11 @@ export default {
     return {
       formData: this.getInicialData(),
       formState: {},
-      nombreLengthMin: 3,
-      nombreLengthMax: 10,
+      nombreLengthMin: 5,
+      nombreLengthMax: 15,
       edadMin: 18,
       edadMax: 120,
+      users: [],
     };
   },
   computed: {},
@@ -21,13 +22,11 @@ export default {
         apellido: "",
         edad: "",
         email: "",
-        password: "",
       };
     },
 
     enviar() {
-      //... -> SPREAD Operator
-      console.log({ ...this.formData });
+      this.users = [...this.users, this.formData];
 
       this.formData = this.getInicialData();
       this.formState._reset();
